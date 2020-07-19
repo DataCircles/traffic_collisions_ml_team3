@@ -1,1 +1,0 @@
-{"frames":[{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"cor(asia, method = c(\"kendall\"))","line_number":0},{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"stop(\"'x' must be numeric\")","line_number":0}],"message":"Error in cor(asia, method = c(\"kendall\")) : 'x' must be numeric\n"}

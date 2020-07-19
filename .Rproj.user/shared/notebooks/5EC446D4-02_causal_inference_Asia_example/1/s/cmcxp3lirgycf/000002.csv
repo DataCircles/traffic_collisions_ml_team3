@@ -1,4 +1,0 @@
-"0","cor_asia <- cor(asia, method = c(""kendall""))
-"
-"2","Error in cor(asia, method = c(""kendall"")) : 'x' must be numeric
-"
