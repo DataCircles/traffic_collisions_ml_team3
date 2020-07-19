@@ -1,0 +1,50 @@
+
+#Function for preparing the table
+
+expandtable <- function(multi_var_data) {
+  colnames(multi_var_data)[length(multi_var_data)] <- "frequency"
+  #Removing rows where "frequency" column was 0
+  frequency <- colnames(multi_var_data)[length(multi_var_data)]
+  multi_var_data[multi_var_data$frequency == 0,]$frequency <- NA
+  multi_var_data<-multi_var_data[complete.cases(multi_var_data),]
+  #Expand frequency table to individual cases as rows
+  multi_var_data <- expand.dft(multi_var_data, freq="frequency")
+}
+
+
+# Score-based Method for Causal Inference
+tabu_search <- function(multi_var_data){
+  nodes<-names(multi_var_data)
+  start<-random.graph(nodes=nodes,method="melancon",num=100,burn.in=10^1, every=50)
+  netlist<-lapply(start,function(net){tabu(multi_var_data,score="bde",iss=1,start=net,tabu=50)})
+  intscore<-custom.strength(netlist,nodes=nodes,cpdag=FALSE)
+  return(intscore)
+}
+
+# Constraint-based Method for Causal Inference
+pc_search <- function(multi_var_data){
+  multi_var_data[]=lapply(multi_var_data, as.numeric)
+  n <- nrow (multi_var_data)
+  V <- colnames(multi_var_data) # labels aka node names
+  # Converting into the Correlation Matrices using Kendall's tau statistic to estimate rank-based measure of association.
+  cor_data <- cor(multi_var_data, method = c("kendall"))
+  ## estimate CPDAG
+  pc.fit <- pc(suffStat = list(C = cor_data, n = n),
+               indepTest = gaussCItest, ## indep.test: partial correlations
+               alpha=0.01, labels = V, verbose = FALSE)
+  bn_object <- as.bn(pc.fit, check.cycles = FALSE)
+  return(bn_object)
+}
+
+
+# Function to get the Causal Graphs
+
+getCausalGraph <- function(multi_var_data){
+  multi_var_data[]= lapply(multi_var_data, as.factor)
+  scores <- tabu_search(multi_var_data)
+  CausalGraph_sb <-averaged.network(scores, threshold = 0.85)
+  CausalGraph_cb <- pc_search(multi_var_data)
+  graphs <- list(CausalGraph_sb,CausalGraph_cb)
+  return(graphs)
+}
+

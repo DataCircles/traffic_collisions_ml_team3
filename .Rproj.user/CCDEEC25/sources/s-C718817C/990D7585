@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1595190772285.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "990D7585",
+    "lastKnownWriteTime" : 1595026821,
+    "last_content_update" : 1595026821,
+    "path" : "~/Work_Space/icees-kp-analytics/causal_inference/Scripts/analysis.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "44,61",
+        "scrollLine" : "26"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

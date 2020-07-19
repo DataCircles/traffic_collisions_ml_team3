@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1595190357838.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "277065929",
+    "id" : "B67F5875",
+    "lastKnownWriteTime" : 1595189855,
+    "last_content_update" : 1595189855,
+    "path" : "~/Work_Space/traffic_collisions_ml_team3/data_sources/corr.csv",
+    "project_path" : "data_sources/corr.csv",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}
