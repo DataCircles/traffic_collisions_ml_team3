@@ -2,7 +2,7 @@
 
 This public repository contains the Machine Learning Team's materials for the Traffic Collisions Project, organized by the Projects Circle. 
 
-__[LINK](https://github.com/DataCircles/projects_circle/tree/master/traffic_collisions_project)__ 
+__[LINK to main github](https://github.com/DataCircles/projects_circle/tree/master/traffic_collisions_project)__ 
 
 
 ### Project Team Members
