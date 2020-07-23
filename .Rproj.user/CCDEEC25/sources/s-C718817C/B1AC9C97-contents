@@ -1,0 +1,39 @@
+---
+title: "Inferring Causal Graphs from Correlation Matrices"
+output:
+  pdf_document: default
+  html_document: default
+---
+In this file, we show a simple example of inferring Causal Graphs given data, in the form of correlation table 1 created during our EDA step.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r message=FALSE, warning = FALSE}
+#install.packages("bnlearn")
+#install.packages("pcalg")
+library(bnlearn)
+library(pcalg)
+```
+
+```{r message=FALSE, warning = FALSE}
+collision_corr <- read.csv("/Users/megha/Work_Space/traffic_collisions_ml_team3/data_sources/corr.csv", header = TRUE, row.names = 1, sep = ",")
+
+# Reading number of row and label names
+n <- nrow (collision_corr)
+V <- colnames(collision_corr) # labels aka node names
+
+#Estimaing causal graph using PC algorithm
+pc.fit <- pc(suffStat = list(C = collision_corr, n = n),
+indepTest = gaussCItest, ## indep.test: partial correlations
+alpha=0.05, labels = V, verbose = FALSE)
+
+#Converting pcAlgo type objects to bn type objects.
+Estimated = as.bn(pc.fit, check.cycles = FALSE)
+#Plotting
+if (require(Rgraphviz)) {
+# show estimated CPDAG
+graphviz.plot(Estimated, main = "Constraint-based Causal Graph")
+}
+```

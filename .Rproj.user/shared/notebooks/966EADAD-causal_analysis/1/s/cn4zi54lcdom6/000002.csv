@@ -1,0 +1,4 @@
+"0","collision_corr <- read.csv(""~/traffic_collisions_ml_team3/data_sources/corr.csv"", header = TRUE, row.names = 1, sep = "","")
+"
+"2","Error in file(file, ""rt"") : cannot open the connection
+"

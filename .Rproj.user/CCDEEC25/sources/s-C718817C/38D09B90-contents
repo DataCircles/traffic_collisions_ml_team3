@@ -1,0 +1,135 @@
+---
+title: "Inferring causal graphs from multivariate ICEES table"
+output:
+  pdf_document: default
+  html_document: default
+---
+# In this file, we show how to infer a casal network via Score based and Constraint based methods using multivariate data derived from ICCES table. The data files located within the "Data" folder contains catagorical multivariate tables with columns as different feature variables and rows as observations. The frequency column of each row show the number of patients in cohorts specific to that row.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Installing the packages
+```{r message=FALSE, warning = FALSE}
+#install.packages("pcalg")
+library(bnlearn)
+library(pcalg)
+library(vcdExtra)
+library(ggplot2)
+```
+
+```{r}
+source("analysis.R")
+```
+
+#Reading the data file "tri_df.csv" and inferring the Causal Graphs. The features in this file consist of "EDVisits", "RoadwayExposure", "MaxPMExposure".
+```{r message=FALSE, warning = FALSE}
+load("~/Work_Space/icees-kp-analytics/data/trivariate_example_one.RData")
+multi_var_data = tri_df
+#expand the table with respect to the frequency ßcolumn
+multi_var_data <- expandtable(multi_var_data)
+multi_var_data[]= lapply(multi_var_data, as.factor)
+#get summary of the data
+summary(multi_var_data)
+#bar plot for further analysis with respect to ED-visits
+ggplot(multi_var_data, aes(x = RoadwayExposure, fill = EDVisits)) +
+  geom_bar()
+ggplot(multi_var_data, aes(x = MaxPMExposure, fill = EDVisits)) +
+  geom_bar()
+```
+
+#Get the covariance matrix
+```{r}
+multi_var_data[]= lapply(multi_var_data, as.numeric)
+cor(multi_var_data, method = c("kendall"))
+```
+#Plotting the Graphs
+```{r}
+#get the causal graphs
+CausalGraphCausalGraph <- getCausalGraph(multi_var_data)
+if (require(Rgraphviz)) {
+## show estimated CPDAG
+#par(mfrow=c(1,2))
+plot(CausalGraphCausalGraph[[1]], main = "Score-based Causal Graph")
+plot(CausalGraphCausalGraph[[2]], main = "Constraint-based Causal Graph")
+}
+```
+#Reading the data file "icees_multivariate_query_one.csv" and inferring the Causal Graphs. The features in this file consist of TotalEDInpatientVisits, Sex2, Race, MEDIANHOUSEHOLDINCOME_qcut, RoadwayDistanceExposure2, PM25_ANNUAL_AVERAGE_qcut, RESPONDER_STATUS.
+
+```{r message=FALSE, warning = FALSE}
+multi_var_data <- read.csv("Data/icees_multivariate_query_one.csv", header = TRUE)
+#expand the table with respect to the frequency ßcolumn
+multi_var_data <- expandtable(multi_var_data)
+multi_var_data[]= lapply(multi_var_data, as.factor)
+#get summary of the data
+summary(multi_var_data)
+```
+#Get the covariance matrix
+```{r}
+multi_var_data[]= lapply(multi_var_data, as.numeric)
+cor(multi_var_data, method = c("kendall"))
+```
+#Plotting the Causal Graphs
+```{r}
+#get the causal graphs
+CausalGraphCausalGraph <- getCausalGraph(multi_var_data)
+if (require(Rgraphviz)) {
+## show estimated CPDAG
+#par(mfrow=c(1,2))
+plot(CausalGraphCausalGraph[[1]], main = "Score-based Causal Graph")
+plot(CausalGraphCausalGraph[[2]], main = "Constraint-based Causal Graph")
+}
+```
+
+#Reading the data file "icees_multivariate_query_two.csv" and inferring the Causal Graphs. The features in this file consist of TotalEDInpatientVisits, Sex2, Race, MEDIANHOUSEHOLDINCOME_cut, RoadwayDistanceExposure2, PM25_ANNUAL_AVERAGE_cut.
+
+```{r message=FALSE, warning = FALSE}
+multi_var_data <- read.csv("Data/icees_multivariate_query_two.csv", header = TRUE)
+#expand the table with respect to the frequency ßcolumn
+multi_var_data <- expandtable(multi_var_data)
+multi_var_data[]= lapply(multi_var_data, as.factor)
+#get summary of the data
+summary(multi_var_data)
+```
+#Get the covariance matrix
+```{r}
+multi_var_data[]= lapply(multi_var_data, as.numeric)
+cor(multi_var_data, method = c("kendall"))
+```
+#Plotting the Causal Graphs
+```{r}
+#get the causal graphs
+CausalGraphCausalGraph <- getCausalGraph(multi_var_data)
+if (require(Rgraphviz)) {
+## show estimated CPDAG
+#par(mfrow=c(1,2))
+plot(CausalGraphCausalGraph[[1]], main = "Score-based Causal Graph")
+plot(CausalGraphCausalGraph[[2]], main = "Constraint-based Causal Graph")
+}
+```
+#Reading the data file "icees_multivariate_query_three.csv" and inferring the Causal Graphs. The features in this file consist of TotalEDInpatientVisits, Sex2, Race, MEDIANHOUSEHOLDINCOME_cut, RoadwayDistanceExposure2, PM25_ANNUAL_AVERAGE_cut, RESPONDER_STATUS.
+
+```{r message=FALSE, warning = FALSE}
+multi_var_data <- read.csv("Data/icees_multivariate_query_three.csv", header = TRUE)
+#expand the table with respect to the frequency ßcolumn
+multi_var_data <- expandtable(multi_var_data)
+multi_var_data[]= lapply(multi_var_data, as.factor)
+#get summary of the data
+summary(multi_var_data)
+```
+#Get the covariance matrix
+```{r}
+multi_var_data[]= lapply(multi_var_data, as.numeric)
+cor(multi_var_data, method = c("kendall"))
+```
+#Plotting the Causal Graphs
+```{r}
+#get the causal graphs
+CausalGraphCausalGraph <- getCausalGraph(multi_var_data)
+if (require(Rgraphviz)) {
+## show estimated CPDAG
+#par(mfrow=c(1,2))
+plot(CausalGraphCausalGraph[[1]], main = "Score-based Causal Graph")
+plot(CausalGraphCausalGraph[[2]], main = "Constraint-based Causal Graph")
+}
+```
