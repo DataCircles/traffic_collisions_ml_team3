@@ -19,7 +19,9 @@ library(pcalg)
 
 ```{r message=FALSE, warning = FALSE}
 collision_corr <- read.csv("/Users/megha/Work_Space/traffic_collisions_ml_team3/data_sources/corr.csv", header = TRUE, row.names = 1, sep = ",")
+```
 
+```{r}
 # Reading number of row and label names
 n <- nrow (collision_corr)
 V <- colnames(collision_corr) # labels aka node names
@@ -30,10 +32,10 @@ indepTest = gaussCItest, ## indep.test: partial correlations
 alpha=0.05, labels = V, verbose = FALSE)
 
 #Converting pcAlgo type objects to bn type objects.
-Estimated = as.bn(pc.fit, check.cycles = FALSE)
+CausalGraph_cb = as.bn(pc.fit, check.cycles = FALSE)
 #Plotting
 if (require(Rgraphviz)) {
 # show estimated CPDAG
-graphviz.plot(Estimated, main = "Constraint-based Causal Graph")
+graphviz.plot(CausalGraph_cb, main = "Constraint-based Causal Graph")
 }
 ```
