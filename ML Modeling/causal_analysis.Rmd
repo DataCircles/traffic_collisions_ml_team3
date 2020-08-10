@@ -18,24 +18,71 @@ library(pcalg)
 ```
 
 ```{r message=FALSE, warning = FALSE}
-collision_corr <- read.csv("/Users/megha/Work_Space/traffic_collisions_ml_team3/data_sources/corr.csv", header = TRUE, row.names = 1, sep = ",")
+collision <- read.csv("/Users/megha/Work_Space/traffic_collisions_ml_team3/data_sources/seattle_collisions_merged_from_sdot_wsdot.csv", header = TRUE, row.names = NULL, sep = ",",stringsAsFactors = F)
 ```
 
 ```{r}
-# Reading number of row and label names
-n <- nrow (collision_corr)
-V <- colnames(collision_corr) # labels aka node names
+summary(collision)
 
+```
+```{r}
+collision$INATTENTIONIND[collision$INATTENTIONIND == ""] <- "N" 
+collision$SPEEDING[collision$SPEEDING == "Unknown"] <- "N"
+```
+```{r}
+drops <- c("longitude","latitude","REPORTNO","INCDTTM","INTKEY","LOCATION")
+collision <- collision[ , !(names(collision) %in% drops)]
+```
+
+```{r}
+#keeps <- c("ADDRTYPE", "SEVERITYDESC", "COLLISIONTYPE", "PERSONCOUNT", "PEDCOUNT","PEDCYLCOUNT", "VEHCOUNT", "INJURIES", "SERIOUSINJURIES", "FATALITIES", "JUNCTIONTYPE", "INATTENTIONIND", "UNDERINFL", "WEATHER_x", "ROADCOND", "LIGHTCOND", "SPEEDING")
+
+keeps <- c("ADDRTYPE","SEVERITYDESC", "UNDERINFL", "WEATHER_x", "ROADCOND","JUNCTIONTYPE","LIGHTCOND", "SPEEDING")
+collision_causal <- collision[keeps]
+```
+
+```{r}
+collision_causal[]= lapply(collision_causal, as.factor)
+collision_causal[]= lapply(collision_causal, as.numeric)
+# Reading number of row and label names
+n <- nrow (collision_causal)
+V <- colnames(collision_causal) # labels aka node names
+
+
+#collision_causal_cor <- cor(collision_causal, method = c("kendall")
 #Estimaing causal graph using PC algorithm
-pc.fit <- pc(suffStat = list(C = collision_corr, n = n),
+pc.fit <- pc(suffStat = list(C = cor(collision_causal), n = n),
 indepTest = gaussCItest, ## indep.test: partial correlations
 alpha=0.05, labels = V, verbose = FALSE)
 
 #Converting pcAlgo type objects to bn type objects.
 CausalGraph_cb = as.bn(pc.fit, check.cycles = FALSE)
 #Plotting
-if (require(Rgraphviz)) {
+#if (require(Rgraphviz)) {
 # show estimated CPDAG
-graphviz.plot(CausalGraph_cb, main = "Constraint-based Causal Graph")
-}
+graphviz.plot(CausalGraph_cb)
+
+plot(pc.stable(collision_causal, cluster = NULL, whitelist = NULL, blacklist = NULL, test = NULL,alpha = 0.05, B = NULL, max.sx = NULL, debug = FALSE, undirected = FALSE))
+
 ```
+
+```{r}
+na_count <-sapply(collision_causal, function(y) sum(length(which(is.na(y)))))
+na_count <- data.frame(na_count)
+
+```
+
+
+
+```{r}
+collision_causal[]= lapply(collision_causal, as.factor)
+nodes<-names(collision_causal)
+start<-random.graph(nodes=nodes,method="melancon",num=10,burn.in=1, every=1)
+netlist<-lapply(start,function(net){tabu(collision_causal,score="bde",iss=1,start=net,tabu=50)})
+intscore<-custom.strength(netlist,nodes=nodes,cpdag=FALSE)
+CausalGraph_sb <-averaged.network(intscore, threshold = 0.85)
+plot(CausalGraph_sb)
+```
+
+
+
